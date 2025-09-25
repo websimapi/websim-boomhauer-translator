@@ -1,0 +1,345 @@
+<html>
+<head>
+  <title>Boomhauer Translator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap');
+    
+    body {
+      font-family: 'Comic Neue', sans-serif;
+      background-color: #87CEEB; /* Sky blue */
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-image: linear-gradient(to bottom, #87CEEB 0%, #f8f8f8 100%);
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 650px;
+      background-color: #f5f5dc; /* Beige */
+      border: 3px solid #8B4513; /* Brown border */
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      padding: 20px;
+      position: relative;
+    }
+    
+    .title-bar {
+      background-color: #D22B2B; /* Red like Hank's truck */
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px 10px 0 0;
+      margin: -20px -20px 20px -20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      font-family: 'Permanent Marker', cursive;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+    
+    .title-icon {
+      width: 30px;
+      height: auto;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .input-area, .output-area {
+      background-color: white;
+      border: 2px solid #8B4513;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    
+    .input-area {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .input-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 120px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: 'Comic Neue', sans-serif;
+      font-size: 16px;
+      resize: none;
+    }
+    
+    .button-area {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    button {
+      background-color: #4A7023; /* Green like Arlen color */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Comic Neue', sans-serif;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    }
+    
+    button:hover {
+      background-color: #5a8b2d;
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .output-area {
+      min-height: 120px;
+      position: relative;
+      padding: 15px;
+    }
+    
+    .output-label {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background-color: #f5f5dc;
+      padding: 0 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    #result {
+      font-family: 'Comic Neue', sans-serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #333;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    
+    .boomhauer-image {
+      position: absolute;
+      right: -60px;
+      bottom: -20px;
+      width: 200px;
+      z-index: 1;
+      pointer-events: none;
+      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    .container:hover .boomhauer-image {
+      transform: scale(1.05);
+    }
+    
+    .container.input-focused .boomhauer-image {
+        transform: translateX(150px) scale(0.8);
+        opacity: 0.4;
+    }
+    
+    .loading {
+      display: none;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    
+    .loading-dot {
+      width: 12px;
+      height: 12px;
+      background-color: #4A7023;
+      border-radius: 50%;
+      margin: 0 5px;
+      animation: bounce 1.5s infinite ease-in-out;
+    }
+    
+    .loading-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .loading-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .footer {
+      margin-top: 20px;
+      color: #555;
+      font-size: 14px;
+      text-align: center;
+    }
+    
+    /* Boomhauer character SVG */
+    .boomhauer-svg {
+      position: absolute;
+      right: -100px;
+      bottom: -100px;
+      width: 200px;
+      height: 200px;
+      z-index: -1;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: 15px;
+      }
+      
+      .boomhauer-image {
+        width: 150px;
+        right: -40px;
+        bottom: -10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title-bar">
+      <img src="alamo_beer.png" alt="Alamo beer can" class="title-icon">
+      <h1>Boomhauer Translator</h1>
+      <img src="alamo_beer.png" alt="Alamo beer can" class="title-icon">
+    </div>
+    
+    <div class="main-content">
+      <div class="input-area">
+        <div class="input-label">Enter your regular text here:</div>
+        <textarea id="inputText" placeholder="Type what you want Boomhauer to say..."></textarea>
+      </div>
+      
+      <div class="button-area">
+        <button id="translateBtn" onclick="boomhauerify()">Dang ol' Translate</button>
+        <button id="clearBtn" onclick="clearText()">Clear</button>
+      </div>
+      
+      <div class="loading" id="loadingIndicator">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+      
+      <div class="output-area">
+        <div class="output-label">Boomhauer says:</div>
+        <div id="result">Dang ol' result shows up here, man.</div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      King of the Hill - Arlen, Texas
+    </div>
+    
+    <img src="boomhauer.png" alt="Boomhauer from King of the Hill" class="boomhauer-image">
+  </div>
+
+  <script>
+    let conversationHistory = [];
+    
+    async function boomhauerify() {
+      const inputText = document.getElementById('inputText').value.trim();
+      
+      if (!inputText) {
+        document.getElementById('result').textContent = "Dang ol' need some words to translate, man!";
+        return;
+      }
+      
+      // Show loading indicator
+      document.getElementById('loadingIndicator').style.display = 'flex';
+      document.getElementById('result').textContent = '';
+      document.getElementById('translateBtn').disabled = true;
+      
+      try {
+        // Use the LLM capabilities instead of the API
+        const completion = await websim.chat.completions.create({
+          messages: [
+            {
+              role: "system",
+              content: "You are Boomhauer from King of the Hill. Translate the user's text into Boomhauer's unique speaking style. Boomhauer speaks in a heavy Southern accent, talks very fast, and uses phrases like 'dang ol', 'man', 'talkin' bout', and often trails off or mumbles. His speech is difficult to understand but contains the essence of what he's trying to say. Keep the translation to roughly the same length as the original text."
+            },
+            {
+              role: "user",
+              content: inputText
+            }
+          ]
+        });
+        
+        // Display the result
+        document.getElementById('result').textContent = completion.content;
+        
+        // Add to conversation history
+        conversationHistory.push({
+          role: "user",
+          content: inputText
+        });
+        conversationHistory.push(completion);
+        
+        // Keep history manageable
+        if (conversationHistory.length > 10) {
+          conversationHistory = conversationHistory.slice(-10);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('result').textContent = "Dang ol' error happened, man. Try again, talkin' bout server problems.";
+      } finally {
+        // Hide loading indicator
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.getElementById('translateBtn').disabled = false;
+      }
+    }
+    
+    function clearText() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('result').textContent = "Dang ol' result shows up here, man.";
+    }
+    
+    // Allow Enter key to trigger translation
+    document.getElementById('inputText').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        boomhauerify();
+      }
+    });
+    
+    // Move Boomhauer when textarea is focused
+    const container = document.querySelector('.container');
+    const inputText = document.getElementById('inputText');
+    
+    inputText.addEventListener('focus', () => {
+        container.classList.add('input-focused');
+    });
+    
+    inputText.addEventListener('blur', () => {
+        container.classList.remove('input-focused');
+    });
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
