@@ -149,8 +149,9 @@
       right: -60px;
       bottom: -20px;
       width: 200px;
-      z-index: 1;
-      pointer-events: none;
+      z-index: 10;
+      pointer-events: auto;
+      cursor: pointer;
       transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     }
 
@@ -161,6 +162,11 @@
     .container.input-focused .boomhauer-image {
         transform: translateX(150px) scale(0.8);
         opacity: 0.4;
+    }
+    
+    .boomhauer-image.scoot {
+        transform: translateX(220px) scale(0.8);
+        opacity: 0;
     }
     
     .loading {
@@ -338,6 +344,11 @@
     
     inputText.addEventListener('blur', () => {
         container.classList.remove('input-focused');
+    });
+    
+    const boomhauerImg = document.querySelector('.boomhauer-image');
+    boomhauerImg.addEventListener('click', () => {
+      boomhauerImg.classList.toggle('scoot');
     });
   </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
